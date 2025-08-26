@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Task Manager</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Main Styles */
+        body {
+            background-color: #e6f2ff;
+            color: #333;
+            line-height: 1.6;
+            background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-blend-mode: overlay;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 1px solid #e1e4e8;
+            padding-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #5a6a7a;
+            padding: 10px 12px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: #e6f2ff;
+            color: #1a73e8;
+        }
+
+        .sidebar-menu img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            opacity: 0.8;
+        }
+
+        .sidebar-projects {
+            margin-top: 30px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .project-item:hover {
+            background-color: #f5f9ff;
+        }
+
+        .project-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Task Area Styles */
+        .task-area {
+            flex: 1;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-header h2 {
+            font-size: 22px;
+            color: #2c3e50;
+        }
+
+        .task-actions-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .btn img {
+            width: 16px;
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            background-color: #0d62c9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #1a73e8;
+            color: #1a73e8;
+        }
+
+        .btn-outline:hover {
+            background-color: #e6f2ff;
+        }
+
+        /* Task Views */
+        .task-view-options {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .view-option {
+            padding: 8px 15px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .view-option.active, .view-option:hover {
+            background-color: #e6f2ff;
+            color: #1a73e8;
+        }
+
+        /* Task Cards View */
+        .task-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .task-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .task-card p {
+            color: #5a6a7a;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .task-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .task-tag {
+            padding: 3px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            background-color: #f0f7ff;
+            color: #1a73e8;
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .task-priority {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .priority-high {
+            background-color: #ffebee;
+            color: #e53935;
+        }
+
+        .priority-medium {
+            background-color: #fff8e1;
+            color: #ffb300;
+        }
+
+        .priority-low {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .task-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            background: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .task-actions button:hover {
+            background-color: #f0f7ff;
+            border-color: #c2d9ff;
+        }
+
+        .task-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Task List View (hidden by default) */
+        .task-list {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-list-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 120px 100px;
+            padding: 15px 20px;
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #5a6a7a;
+            border-bottom: 1px solid #eee;
+        }
+
+        .task-list-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 120px 100px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        .task-list-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .task-list-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Calendar View (hidden by default) */
+        .task-calendar {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .calendar-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 10px;
+            color: #5a6a7a;
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8fafc;
+        }
+
+        .calendar-day.today {
+            background-color: #e6f2ff;
+            border: 1px solid #c2d9ff;
+        }
+
+        .calendar-day-number {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .calendar-task {
+            font-size: 12px;
+            padding: 3px 6px;
+            background-color: white;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        /* Kanban View (hidden by default) */
+        .task-kanban {
+            display: none;
+        }
+
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .kanban-column {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .kanban-column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .kanban-column-title {
+            font-weight: 600;
+        }
+
+        .kanban-column-count {
+            background-color: #e6f2ff;
+            color: #1a73e8;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .kanban-task {
+            background-color: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: move;
+        }
+
+        .kanban-task:hover {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .kanban-task-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .kanban-task-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state img {
+            width: 150px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .empty-state p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .kanban-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+           
+            .sidebar {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .kanban-board {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .task-actions-container {
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .task-list-header, .task-list-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .task-list-header {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/3502/3502688.png" alt="Task Manager Logo">
+                <h1>Advanced Task Manager</h1>
+            </div>
+            <div class="user-profile">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Profile">
+                <span>Sarah Johnson</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h2>Menu</h2>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="#" class="active">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" alt="Dashboard">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2838/2838912.png" alt="Tasks">
+                            My Tasks
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn-icons-png.flaticon.com/512/860/860784.png" alt="Projects">
+                            Projects
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1570/1570887.png" alt="Calendar">
+                            Calendar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="Team">
+                            Team
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1829/1829558.png" alt="Settings">
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-projects">
+                    <h2>Projects</h2>
+                    <div class="project-item">
+                        <div class="project-color" style="background-color: #1a73e8;"></div>
+                        <span>Website Redesign</span>
+                    </div>
+                    <div class="project-item">
+                        <div class="project-color" style="background-color: #43a047;"></div>
+                        <span>Marketing Campaign</span>
+                    </div>
+                    <div class="project-item">
+                        <div class="project-color" style="background-color: #ffb300;"></div>
+                        <span>Product Launch</span>
+                    </div>
+                    <div class="project-item">
+                        <div class="project-color" style="background-color: #e53935;"></div>
+                        <span>Mobile App</span>
+                    </div>
+                    <div class="project-item">
+                        <div class="project-color" style="background-color: #8e24aa;"></div>
+                        <span>Internal Tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-area">
+                <div class="task-header">
+                    <h2>My Tasks</h2>
+                    <div class="task-actions-container">
+                        <button class="btn">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3524/3524388.png" alt="Add">
+                            + New Task
+                        </button>
+                        <button class="btn btn-outline">
+                            <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="Filter">
+                            Filter
+                        </button>
+                        <button class="btn btn-outline">
+                            <img src="https://cdn-icons-png.flaticon.com/512/709/709586.png" alt="Sort">
+                            Sort
+                        </button>
+                    </div>
+                </div>
+
+                <div class="task-view-options">
+                    <div class="view-option active" onclick="showView('cards')">Cards</div>
+                    <div class="view-option" onclick="showView('list')">List</div>
+                    <div class="view-option" onclick="showView('calendar')">Calendar</div>
+                    <div class="view-option" onclick="showView('kanban')">Kanban</div>
+                </div>
+
+                <!-- Cards View -->
+                <div id="cards-view" class="task-cards">
+                    <div class="task-card">
+                        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Task Image" class="task-image">
+                        <div class="task-tags">
+                            <span class="task-tag">Design</span>
+                            <span class="task-tag">Website</span>
+                        </div>
+                        <h3>Design Homepage Layout</h3>
+                        <p>Create wireframes and mockups for the new company homepage design following the latest UX principles and brand guidelines.</p>
+                        <div class="task-meta">
+                            <span>Due: May 15, 2023</span>
+                            <span class="task-priority priority-high">High</span>
+                        </div>
+                        <div class="task-actions">
+                            <button>Edit</button>
+                            <button>Complete</button>
+                            <button>Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="task-card">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Task Image" class="task-image">
+                        <div class="task-tags">
+                            <span class="task-tag">Meeting</span>
+                            <span class="task-tag">Presentation</span>
+                        </div>
+                        <h3>Team Meeting Preparation</h3>
+                        <p>Prepare agenda, presentation slides, and performance reports for the quarterly team meeting with stakeholders.</p>
+                        <div class="task-meta">
+                            <span>Due: May 10, 2023</span>
+                            <span class="task-priority priority-medium">Medium</span>
+                        </div>
+                        <div class="task-actions">
+                            <button>Edit</button>
+                            <button>Complete</button>
+                            <button>Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="task-card">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Task Image" class="task-image">
+                        <div class="task-tags">
+                            <span class="task-tag">Analysis</span>
+                            <span class="task-tag">Reports</span>
+                        </div>
+                        <h3>Monthly Report Analysis</h3>
+                        <p>Analyze and summarize the key metrics from last month's performance report and prepare insights for management.</p>
+                        <div class="task-meta">
+                            <span>Due: May 20, 2023</span>
+                            <span class="task-priority priority-low">Low</span>
+                        </div>
+                        <div class="task-actions">
+                            <button>Edit</button>
+                            <button>Complete</button>
+                            <button>Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="task-card">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Task Image" class="task-image">
+                        <div class="task-tags">
+                            <span class="task-tag">Development</span>
+                            <span class="task-tag">API</span>
+                        </div>
+                        <h3>API Integration</h3>
+                        <p>Integrate the payment gateway API with the checkout system and test all possible scenarios.</p>
+                        <div class="task-meta">
+                            <span>Due: May 18, 2023</span>
+                            <span class="task-priority priority-high">High</span>
+                        </div>
+                        <div class="task-actions">
+                            <button>Edit</button>
+                            <button>Complete</button>
+                            <button>Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List View -->
+                <div id="list-view" class="task-list">
+                    <div class="task-list-header">
+                        <div>Task Name</div>
+                        <div>Project</div>
+                        <div>Due Date</div>
+                        <div>Priority</div>
+                        <div>Status</div>
+                    </div>
+                    <div class="task-list-item">
+                        <div>Design Homepage Layout</div>
+                        <div>Website Redesign</div>
+                        <div>May 15, 2023</div>
+                        <div><span class="task-priority priority-high">High</span></div>
+                        <div>In Progress</div>
+                    </div>
+                    <div class="task-list-item">
+                        <div>Team Meeting Preparation</div>
+                        <div>Marketing Campaign</div>
+                        <div>May 10, 2023</div>
+                        <div><span class="task-priority priority-medium">Medium</span></div>
+                        <div>Not Started</div>
+                    </div>
+                    <div class="task-list-item">
+                        <div>Monthly Report Analysis</div>
+                        <div>Internal Tools</div>
+                        <div>May 20, 2023</div>
+                        <div><span class="task-priority priority-low">Low</span></div>
+                        <div>Not Started</div>
+                    </div>
+                    <div class="task-list-item">
+                        <div>API Integration</div>
+                        <div>Mobile App</div>
+                        <div>May 18, 2023</div>
+                        <div><span class="task-priority priority-high">High</span></div>
+                        <div>In Progress</div>
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div id="calendar-view" class="task-calendar">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button>&lt;</button>
+                            <div class="calendar-title">May 2023</div>
+                            <button>&gt;</button>
+                        </div>
+                        <button class="btn">Today</button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                        
+                        <!-- Calendar days would be dynamically generated in a real app -->
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">30</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">1</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">2</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">3</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">4</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">5</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">6</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">7</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">8</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">9</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">10</div>
+                            <div class="calendar-task">Team Meeting</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">11</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">12</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">13</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">14</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">15</div>
+                            <div class="calendar-task">Design Deadline</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">16</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">17</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">18</div>
+                            <div class="calendar-task">API Integration</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">19</div>
+                        </div>
+                        <div class="calendar-day today">
+                            <div class="calendar-day-number">20</div>
+                            <div class="calendar-task">Reports Due</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">21</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">22</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">23</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">24</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">25</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">26</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">27</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">28</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">29</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">30</div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="calendar-day-number">31</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kanban View -->
+                <div id="kanban-view" class="task-kanban">
+                    <div class="kanban-board">
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <div class="kanban-column-title">To Do</div>
+                                <div class="kanban-column-count">3</div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">Content Update</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 22</span>
+                                    <span class="task-priority priority-medium">Medium</span>
+                                </div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">SEO Optimization</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 25</span>
+                                    <span class="task-priority priority-low">Low</span>
+                                </div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">User Testing</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 28</span>
+                                    <span class="task-priority priority-high">High</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <div class="kanban-column-title">In Progress</div>
+                                <div class="kanban-column-count">2</div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">Design Homepage</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 15</span>
+                                    <span class="task-priority priority-high">High</span>
+                                </div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">API Integration</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 18</span>
+                                    <span class="task-priority priority-high">High</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <div class="kanban-column-title">In Review</div>
+                                <div class="kanban-column-count">1</div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">Team Meeting Prep</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 10</span>
+                                    <span class="task-priority priority-medium">Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <div class="kanban-column-title">Done</div>
+                                <div class="kanban-column-count">1</div>
+                            </div>
+                            <div class="kanban-task">
+                                <div class="kanban-task-title">Research Competitors</div>
+                                <div class="kanban-task-meta">
+                                    <span>May 5</span>
+                                    <span class="task-priority priority-low">Low</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showView(viewName) {
+            // Hide all views
+            document.getElementById('cards-view').style.display = 'none';
+            document.getElementById('list-view').style.display = 'none';
+            document.getElementById('calendar-view').style.display = 'none';
+            document.getElementById('kanban-view').style.display = 'none';
+            
+            // Show selected view
+            document.getElementById(viewName + '-view').style.display = viewName === 'cards' ? 'grid' : 
+                                                                     viewName === 'kanban' ? 'block' : 
+                                                                     viewName === 'list' ? 'block' : 'block';
+            
+            // Update active tab
+            const viewOptions = document.querySelectorAll('.view-option');
+            viewOptions.forEach(option => {
+                option.classList.remove('active');
+                if (option.textContent.toLowerCase() === viewName) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize with cards view
+        document.addEventListener('DOMContentLoaded', function() {
+            showView('cards');
+        });
+    </script>
+</body>
+</html>
